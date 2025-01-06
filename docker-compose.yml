@@ -1,5 +1,3 @@
-version: "3"
-
 services:
     # image project
     app:
@@ -13,7 +11,7 @@ services:
         depends_on:
             - redis
         networks:
-            - laravel
+            - rede
 
     # nginx
     nginx:
@@ -25,7 +23,7 @@ services:
             - ./:/var/www
             - ./docker/nginx/:/etc/nginx/conf.d/
         networks:
-            - laravel
+            - rede
 
     # db mysql
     db:
@@ -33,7 +31,7 @@ services:
         platform: linux/x86_64
         restart: unless-stopped
         environment:
-            MYSQL_DATABASE: ${DB_DATABASE:-laravel}
+            MYSQL_DATABASE: ${DB_DATABASE:-saas}
             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
             MYSQL_PASSWORD: ${DB_PASSWORD:-userpass}
             MYSQL_USER: ${DB_USERNAME:-username}
@@ -42,28 +40,14 @@ services:
         ports:
             - "3300:3306"
         networks:
-            - laravel
-
-    # PHPMyAdmin
-    phpmyadmin:
-        image: phpmyadmin/phpmyadmin
-        platform: linux/x86_64
-        restart: unless-stopped
-        ports:
-            - "8080:80"
-        environment:
-            PMA_HOST: db
-            PMA_PORT: 3306
-            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
-        networks:
-            - laravel
+            - rede
 
     # redis
     redis:
         image: redis:latest
         networks:
-            - laravel
+            - rede
 
 networks:
-    laravel:
+    rede:
         driver: bridge
