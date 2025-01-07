@@ -32,4 +32,27 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('status', 'Usuario adicionando com sucesso.');
     }
 
+    public function edit(User $user)
+    {
+            return view('users.edit', compact('user'));
+    }
+    public function update(Request $request, User $user)
+    {
+        $imput = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'exclude_if:password,null|min:8',
+        ]);
+
+        $user->update($imput);
+
+        return redirect()->route('users.index')->with('status', 'Usuario atualizado com sucesso.');
+    }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+        return redirect()->route('users.index')->with('status', 'Usuario removido com sucesso.');
+    }
+
 }
