@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\UserProfile; 
+use App\Models\UserInterest;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -65,6 +66,29 @@ class UserController extends Controller
 
 
         return redirect()->route('users.index')->with('status', 'Perfil atualizado com sucesso.');
+    }
+    public function updateInterests(Request $request, User $user)
+    {
+    $input = $request->validate([
+        'interests' => 'nullable|array',
+    ]);
+
+    $user->interests()->delete();
+
+ 
+    if (!empty($input['interests'])) {
+
+        $interests = array_map(function($interest) use ($user) {
+            return [
+                'user_id' => $user->id,
+                'interest' => $interest
+            ];
+        }, $input['interests']);
+
+        $user->interests()->createMany($interests);
+    }
+
+    return redirect()->route('users.index')->with('status', 'Interesses atualizados com sucesso.');
     }
 
     public function destroy(User $user)

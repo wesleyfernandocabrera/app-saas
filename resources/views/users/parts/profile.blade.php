@@ -1,6 +1,4 @@
-<!-- filepath: /Users/wesley/Desktop/app-saas/resources/views/users/parts/basic-details.blade.php -->
 <div class="card">
-    
     <div class="card-header">
         <h3>Perfil</h3>
     </div>
@@ -15,10 +13,7 @@
                 class="form-control @error('type') is-invalid @enderror" id="type">
 
                 @foreach(['Física', 'Jurídica'] as $type)
-
-                
-                    <option value="{{ $type }}" @if(old('type') == $type || $user?->profile->type == $type) selected @endif>{{ $type }}</option>
-
+                    <option value="{{ $type }}" @if(old('type') == $type || (isset($user->profile) && $user->profile->type == $type)) selected @endif>{{ $type }}</option>
                 @endforeach
                 </select>
 
@@ -27,7 +22,6 @@
                         {{ $message }}
                     </div>
                 @enderror
-
             </div>
 
             <div class="mb-3">
@@ -36,12 +30,13 @@
                        name="address" 
                        class="form-control @error('address') is-invalid @enderror" 
                        id="address" 
-                       value="{{ old('address') ?? $user?->profile->address }}">
+                       value="{{ old('address') ?? ($user->profile->address ?? '') }}">
                 @error('address')
                     <div class="invalid-feedback">
                         {{ $message }}
                     </div>
                 @enderror
+            </div>
 
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary">Editar</button>
@@ -49,10 +44,3 @@
         </form>
     </div>
 </div>
-
-
-
- 
-
-
-
