@@ -36,7 +36,7 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-            $user->load('profile');
+            $user->load('profile', 'interests');
             return view('users.edit', compact('user'));
     }
     public function update(Request $request, User $user)

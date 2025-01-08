@@ -8,6 +8,8 @@
 </div>
 @endsession
 
+@include('users.parts.roles')
+<br>
 @include('users.parts.interests')
 <br>
 @include('users.parts.basic-details')    
