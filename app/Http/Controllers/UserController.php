@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserProfile; 
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -21,32 +22,49 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $imput = $request->validate([
+        $input = $request->validate([
             'name' => 'required',
             'email' => 'required|email',
             'password' => 'required|min:8',
         ]);
 
-        User::create($imput);
+        User::create($input);
 
         return redirect()->route('users.index')->with('status', 'Usuario adicionando com sucesso.');
     }
 
     public function edit(User $user)
     {
+            $user->load('profile');
             return view('users.edit', compact('user'));
     }
     public function update(Request $request, User $user)
     {
-        $imput = $request->validate([
+        $input = $request->validate([
             'name' => 'required',
             'email' => 'required|email',
             'password' => 'exclude_if:password,null|min:8',
         ]);
 
-        $user->update($imput);
+        $user->update($input);
 
         return redirect()->route('users.index')->with('status', 'Usuario atualizado com sucesso.');
+    }
+    public function updateProfile(Request $request, User $user)
+    {
+        $input = $request->validate([
+            'type' => 'required',
+            'address' => 'nullable',
+      
+        ]);
+
+        UserProfile::updateOrCreate(
+            ['user_id' => $user->id],
+            
+        $input); 
+
+
+        return redirect()->route('users.index')->with('status', 'Perfil atualizado com sucesso.');
     }
 
     public function destroy(User $user)
