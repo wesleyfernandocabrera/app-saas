@@ -2,36 +2,28 @@
     <div class="card-header">
         <h3>Cargos</h3>
     </div>
-   
-    
     <div class="card-body">
-        <form action="{{ route('users.updateInterests', $user->id) }}" method="POST">
+        <form action="{{ route('users.updateRoles', $user->id) }}" method="POST">
             @csrf
             @method('PUT')
-            @foreach(['PHP', 'JavaScript', 'Python', 'Ruby'] as $interest)
+            @foreach($roles as $role)
             <div class="form-check">
                 <input 
-                    class="form-check-input @error('interests') is-invalid @enderror" 
+                    class="form-check-input @error('roles') is-invalid @enderror" 
                     type="checkbox"
-                    name="interests[]" 
-                    @checked(in_array($interest, $user->profile->interests ?? []))
-                    value="{{ $interest }}" 
-                    id="flexCheck{{ $interest }}" 
-                    @if(in_array($interest, $user->interests->pluck('interest')->toArray())) checked @endif
-                <label class="form-check-label" for="flexCheck{{ $interest }}">
-                    {{ $interest }}
+                    value="{{ $role->id }}" 
+                    name="roles[]"
+                    @if($user->roles && $user->roles->contains($role->id)) checked @endif>
+                <label class="form-check-label">
+                    {{ $role->name }}
                 </label>
-                    @if($loop->last)
-                    @error('interests')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                    @endif
-
-                
             </div>
             @endforeach
+            @error('roles')
+            <div class="invalid-feedback d-block">{{ $message }}</div>
+            @enderror
             <br>
-            <div class="card-footer">
+            <div class="card-footer text">
                 <button type="submit" class="btn btn-primary">Editar</button>
             </div>
         </form>

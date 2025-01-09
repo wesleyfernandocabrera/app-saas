@@ -21,7 +21,6 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('role_id')->constrained()->onDelete('cascade');
             $table->primary(['user_id', 'role_id']);
-            $table->string('name');
         });
     }
 
@@ -30,6 +29,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('role_user');
         Schema::dropIfExists('roles');
     }
 };
