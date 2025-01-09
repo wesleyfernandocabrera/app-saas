@@ -13,6 +13,18 @@
 </div>
 @endif
 
+<form action="{{ route('users.index') }}" method="GET" class="mb-3">
+    <div class="input-group">
+        <input type="text" 
+               name="search" 
+               class="form-control" 
+               placeholder="Pesquisar por nome ou email">
+               <button class="btn btn-primary btn-sm" type="submit">
+    <i class="bi bi-search"></i> Pesquisar
+</button>
+    </div>
+</form>
+
 <table class="table">
   <thead>
     <tr>
