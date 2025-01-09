@@ -19,7 +19,7 @@
       <th scope="col">#</th>
       <th scope="col">Name</th>
       <th scope="col">Email</th>
-      <th scope="col" class="text">Ação</th>
+      <th scope="col" class="text-end">Ação</th>
     </tr>
   </thead>
   <tbody>
@@ -41,5 +41,7 @@
     @endforeach
   </tbody>
 </table>
+
+{{$users->links()}}
 
 @endsection
