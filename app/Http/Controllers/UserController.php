@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\UserProfile; 
 use App\Models\UserInterest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -46,13 +47,17 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+            Gate::authorize('edit', $user::class);
+
             $user->load('profile', 'interests');
             $roles= role ::all();
             return view('users.edit', compact('user','roles'));
     }
     public function update(Request $request, User $user)
     {
-        $input = $request->validate([
+            Gate::authorize('edit', $user::class); 
+
+            $input = $request->validate([
             'name' => 'required',
             'email' => 'required|email',
             'password' => 'exclude_if:password,null|min:8',
@@ -64,7 +69,9 @@ class UserController extends Controller
     }
     public function updateRoles(Request $request, User $user)
     {
-        $input = $request->validate([
+            Gate::authorize('edit', $user::class);
+
+            $input = $request->validate([
             'roles' => 'required|array',
         ]);
 
@@ -76,13 +83,15 @@ class UserController extends Controller
 
     public function updateProfile(Request $request, User $user)
     {
-        $input = $request->validate([
+            Gate::authorize('edit', $user::class);
+
+            $input = $request->validate([
             'type' => 'required',
             'address' => 'nullable',
       
         ]);
 
-        UserProfile::updateOrCreate(
+            UserProfile::updateOrCreate(
             ['user_id' => $user->id],
             
         $input); 
@@ -92,8 +101,10 @@ class UserController extends Controller
     }
     public function updateInterests(Request $request, User $user)
     {
-    $input = $request->validate([
-        'interests' => 'nullable|array',
+            Gate::authorize('edit', $user::class);    
+
+            $input = $request->validate([
+            'interests' => 'nullable|array',
     ]);
 
     $user->interests()->delete();
@@ -116,8 +127,10 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        $user->delete();
-        return redirect()->route('users.index')->with('status', 'Usuario removido com sucesso.');
+                Gate::authorize('destroy', $user::class);  
+
+                $user->delete();
+                return redirect()->route('users.index')->with('status', 'Usuario removido com sucesso.');
     }
 
 }

@@ -13,6 +13,8 @@
 </div>
 @endif
 
+
+
 <form action="{{ route('users.index') }}" method="GET" class="mb-3">
     <div class="input-group">
         <input type="text" 
@@ -41,13 +43,18 @@
       <td>{{$user->name}}</td>
       <td>{{$user->email}}</td>
       <td class="text-end">
+        @can('edit', App\Models\User::class)
         <a href="{{route('users.edit', $user->id )}}" class="btn btn-primary btn-sm">Editar</a>
-
+        @endcan
+        @can('destroy', App\Models\User::class)
         <form action="{{route('users.destroy', $user->id )}}" method="POST" style="display: inline;">
           @csrf
           @method('DELETE')
           <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+          
         </form>
+        @endcan
+       
       </td>
     </tr>
     @endforeach
